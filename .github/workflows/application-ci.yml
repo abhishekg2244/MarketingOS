@@ -1,0 +1,54 @@
+
+name: MarketingOS CI
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+
+  # API SERVICE
+  api:
+    uses: abhishekg2244/cc-org-shared-workflows/.github/workflows/converge.yaml@main
+    with:
+      service_name: api
+      dockerfile: api/Dockerfile
+      context: .
+      image_name: ghcr.io/abhishekg2244/marketingos-api
+      image_tag: ${{ github.sha }}
+      container_port: 8000
+      registry: ghcr.io
+    secrets: inherit
+
+  # AGENT SERVICE
+  agent:
+    uses: abhishekg2244/cc-org-shared-workflows/.github/workflows/converge.yaml@main
+    with:
+      service_name: agent
+      dockerfile: agent/Dockerfile
+      context: .
+      image_name: ghcr.io/abhishekg2244/marketingos-agent
+      image_tag: ${{ github.sha }}
+      container_port: 8001
+      registry: ghcr.io
+    secrets: inherit
+
+  # TOOLS SERVICE
+  tools:
+    uses: abhishekg2244/cc-org-shared-workflows/.github/workflows/converge.yaml@main
+    with:
+      service_name: tools
+      dockerfile: tools/Dockerfile
+      context: .
+      image_name: ghcr.io/abhishekg2244/marketingos-tools
+      image_tag: ${{ github.sha }}
+      container_port: 8002
+      registry: ghcr.io
+    secrets: inherit
